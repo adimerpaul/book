@@ -10,6 +10,11 @@ const routes = [
         meta: {requiresAuth: true, perm: 'Usuarios'}
       },
       {
+        path: '/autores',
+        component: () => import('pages/autores/Autores.vue'),
+        meta: {requiresAuth: true}
+      },
+      {
         path:'/cambiar-contrasena',
         component: () => import('pages/cambiar-contrasena/CambiarContrasena.vue'),
         meta: { requiresAuth: true }

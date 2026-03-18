@@ -1,6 +1,5 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <!-- HEADER -->
     <q-header class="bg-white text-black" bordered>
       <q-toolbar>
         <q-btn
@@ -13,8 +12,8 @@
         />
 
         <div class="row items-center q-gutter-sm">
-          <div class="text-subtitle1 text-weight-medium" style="line-height: 0.9">
-            Dashboard de Tickets <br>
+          <div class="text-subtitle1 text-weight-medium" style="line-height: 0.95">
+            Latinas Editores <br>
             <q-badge color="warning" text-color="black" v-if="roleText" class="text-bold">
               {{ roleText }}
             </q-badge>
@@ -80,13 +79,13 @@
             </q-item>
 
             <q-separator />
-<!--            cambiar contrseña-->
+
             <q-item clickable v-close-popup @click="$router.push('/cambiar-contrasena')">
               <q-item-section avatar>
                 <q-icon name="vpn_key" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>Cambiar Contraseña</q-item-label>
+                <q-item-label>Cambiar Contrasena</q-item-label>
               </q-item-section>
             </q-item>
 
@@ -103,7 +102,6 @@
       </q-toolbar>
     </q-header>
 
-    <!-- DRAWER -->
     <q-drawer
       v-model="leftDrawerOpen"
       bordered
@@ -117,15 +115,14 @@
           <q-avatar size="64px" class="q-mb-sm bg-white" rounded>
             <q-img src="/logo.png" width="90px" />
           </q-avatar>
-          <div class="text-weight-bold text-white">TICKETS</div>
-          <div class="text-caption text-white">Sistema de Gestión</div>
+          <div class="text-weight-bold text-white">LATINAS EDITORES</div>
+          <div class="text-caption text-white">Panel de gestion editorial</div>
         </q-item-label>
 
         <q-item-label header class="q-px-md text-grey-3 q-mt-sm">
-          Módulos del Sistema
+          Modulos del sistema
         </q-item-label>
 
-        <!-- DASHBOARD -->
         <q-item
           dense
           to="/"
@@ -137,14 +134,13 @@
           v-if="hasPermission('Dashboard')"
         >
           <q-item-section avatar>
-            <q-icon name="dashboard" class="text-white" />
+            <q-icon name="dashboard" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-white">Dashboard</q-item-label>
+            <q-item-label class="menu-label">Dashboard</q-item-label>
           </q-item-section>
         </q-item>
 
-        <!-- USUARIOS -->
         <q-item
           dense
           to="/usuarios"
@@ -156,18 +152,30 @@
           v-if="hasPermission('Usuarios')"
         >
           <q-item-section avatar>
-            <q-icon name="people" class="text-white" />
+            <q-icon name="people" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-white">Usuarios</q-item-label>
+            <q-item-label class="menu-label">Usuarios</q-item-label>
           </q-item-section>
         </q-item>
 
-        <!-- ========================= -->
-        <!-- GRADERÍAS (NUEVO MÓDULO) -->
-        <!-- ========================= -->
+        <q-item
+          dense
+          to="/autores"
+          exact
+          clickable
+          class="menu-item"
+          active-class="menu-active"
+          v-close-popup
+        >
+          <q-item-section avatar>
+            <q-icon name="library_books" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="menu-label">Autores</q-item-label>
+          </q-item-section>
+        </q-item>
 
-        <!-- MIS GRADERÍAS -->
         <q-item
           dense
           to="/mis-graderias"
@@ -179,14 +187,13 @@
           v-if="hasPermission('Graderias')"
         >
           <q-item-section avatar>
-            <q-icon name="stadium" class="text-white" />
+            <q-icon name="stadium" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-white">Mis graderías</q-item-label>
+            <q-item-label class="menu-label">Mis graderias</q-item-label>
           </q-item-section>
         </q-item>
 
-        <!-- CREAR GRADERÍA -->
         <q-item
           dense
           to="/mis-graderias/nueva"
@@ -198,13 +205,13 @@
           v-if="hasPermission('Graderias')"
         >
           <q-item-section avatar>
-            <q-icon name="add_box" class="text-white" />
+            <q-icon name="add_box" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-white">Nueva gradería</q-item-label>
+            <q-item-label class="menu-label">Nueva graderia</q-item-label>
           </q-item-section>
         </q-item>
-<!--        cambiar contraseña-->
+
         <q-item
           dense
           to="/cambiar-contrasena"
@@ -215,20 +222,19 @@
           v-close-popup
         >
           <q-item-section avatar>
-            <q-icon name="vpn_key" class="text-white" />
+            <q-icon name="vpn_key" />
           </q-item-section>
           <q-item-section>
-            <q-item-label class="text-white">Cambiar Contraseña</q-item-label>
+            <q-item-label class="menu-label">Cambiar Contrasena</q-item-label>
           </q-item-section>
         </q-item>
 
-        <!-- FOOTER -->
         <div class="q-pa-md">
           <div class="text-white-7 text-caption">
-            Tickets v{{ $version }}
+            Latinas Editores v{{ $version }}
           </div>
           <div class="text-white-7 text-caption">
-            © {{ new Date().getFullYear() }} Sistema de Tickets
+            © {{ new Date().getFullYear() }} Sistema editorial
           </div>
         </div>
 
@@ -243,7 +249,6 @@
       </q-list>
     </q-drawer>
 
-    <!-- PAGE -->
     <q-page-container class="bg-grey-2">
       <router-view />
     </q-page-container>
@@ -258,9 +263,6 @@ export default {
       leftDrawerOpen: false
     }
   },
-  mounted () {
-    // this.fetchMenuEventos()
-  },
   computed: {
     roleText () {
       const role = this.$store && this.$store.user ? this.$store.user.role : ''
@@ -269,15 +271,6 @@ export default {
     }
   },
   methods: {
-    // fetchMenuEventos () {
-    //   this.$axios.get('/eventosMenu')
-    //     .then(res => {
-    //       this.$store.menuEventosByPais = res.data.items || []
-    //     })
-    //     .catch(() => {
-    //       this.$store.menuEventosByPais = []
-    //     })
-    // },
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
@@ -287,7 +280,7 @@ export default {
         : false
     },
     logout () {
-      this.$alert.dialog('¿Desea salir del sistema?')
+      this.$alert.dialog('Desea salir del sistema?')
         .onOk(() => {
           this.$axios.post('/logout')
             .then(() => {
@@ -314,11 +307,27 @@ export default {
 .menu-item {
   border-radius: 10px;
   margin: 4px 8px;
-  padding: 4px 6px;
+  padding: 6px 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
+
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.menu-label {
+  color: rgba(255, 255, 255, 0.94);
+}
+
 .menu-active {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.24);
   color: #fff !important;
   border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+}
+
+.menu-active .menu-label,
+.menu-active .q-icon {
+  color: #ffffff !important;
 }
 </style>

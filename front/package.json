@@ -1,8 +1,8 @@
 {
-  "name": "front",
+  "name": "latinas",
   "version": "0.0.1",
-  "description": "Tickets",
-  "productName": "Tickets",
+  "description": "Latinas",
+  "productName": "Latinas",
   "author": "adimerpaul <adimer101@gmail.com>",
   "type": "module",
   "private": true,

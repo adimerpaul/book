@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Autor;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,9 +23,10 @@ class DatabaseSeeder extends Seeder
 //            'name' => 'Test User',
 //            'email' => 'test@example.com',
 //        ]);
-        $userAdmin = User::create([
-            'name' => 'Admin User',
+        $userAdmin = User::firstOrCreate([
             'username' => 'admin',
+        ], [
+            'name' => 'Admin User',
             'role' => 'Administrador',
             'avatar' => 'default.png',
             'email' => '',
@@ -32,17 +34,22 @@ class DatabaseSeeder extends Seeder
         ]);
         $permisos = [
             'Dashboard',
-//            'Usuarios',
+            'Usuarios',
 //            'Graderias',
 //            'Reservas',
 //            'Idiomas',
 //            'Precios',
 //            'Reportes'
-        ];;
+        ];
         foreach ($permisos as $permiso) {
-            Permission::create(['name' => $permiso]);
+            Permission::firstOrCreate(['name' => $permiso]);
         }
         $userAdmin->givePermissionTo(Permission::all());
+
+        $autoresActuales = Autor::count();
+        if ($autoresActuales < 1000) {
+            Autor::factory(1000 - $autoresActuales)->create();
+        }
 //        $this->call([
 //                EventoSeeder::class,
 ////                EventoHorarioSeeder::class,
