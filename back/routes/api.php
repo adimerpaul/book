@@ -3,6 +3,7 @@
 //use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\LibroController;
 
 Route::post('/login', [App\Http\Controllers\UserController::class, 'login']);
 
@@ -32,4 +33,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/autores/{autor}', [AutorController::class, 'update']);
     Route::delete('/autores/{autor}', [AutorController::class, 'destroy']);
     Route::post('/autores/{autor}/fotografia', [AutorController::class, 'updateFotografia']);
+
+    Route::get('/libros', [LibroController::class, 'index']);
+    Route::get('/libros/{libro}', [LibroController::class, 'show']);
+    Route::post('/libros', [LibroController::class, 'store']);
+    Route::put('/libros/{libro}', [LibroController::class, 'update']);
+    Route::delete('/libros/{libro}', [LibroController::class, 'destroy']);
+    Route::post('/libros/{libro}/portada', [LibroController::class, 'updatePortada']);
+    Route::post('/libros/{libro}/fotografias', [LibroController::class, 'addFotografias']);
+    Route::delete('/libros/{libro}/fotografias/{fotografia}', [LibroController::class, 'removeFotografia']);
 });

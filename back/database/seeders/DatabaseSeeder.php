@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Autor;
+use App\Models\Libro;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -49,6 +50,22 @@ class DatabaseSeeder extends Seeder
         $autoresActuales = Autor::count();
         if ($autoresActuales < 1000) {
             Autor::factory(1000 - $autoresActuales)->create();
+        }
+
+        $librosActuales = Libro::count();
+        if ($librosActuales < 1000) {
+            $autorIds = Autor::query()->pluck('id')->all();
+
+            collect(range(1, 1000 - $librosActuales))
+                ->chunk(100)
+                ->each(function ($chunk) use ($autorIds) {
+                    $chunk->each(function () use ($autorIds) {
+                        $libro = Libro::factory()->make([
+                            'autor_id' => fake()->randomElement($autorIds),
+                        ]);
+                        $libro->save();
+                    });
+                });
         }
 //        $this->call([
 //                EventoSeeder::class,
