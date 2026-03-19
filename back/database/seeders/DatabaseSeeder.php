@@ -63,6 +63,7 @@ class DatabaseSeeder extends Seeder
                         $libro = Libro::factory()->make([
                             'autor_id' => fake()->randomElement($autorIds),
                         ]);
+                        $libro->slug = Libro::generateUniqueSlug($libro->titulo);
                         $libro->save();
                     });
                 });

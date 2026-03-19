@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Libro;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class LibroFactory extends Factory
 {
@@ -11,9 +12,11 @@ class LibroFactory extends Factory
 
     public function definition(): array
     {
+        $titulo = fake()->sentence(fake()->numberBetween(2, 5));
+
         return [
-            'slug' => null,
-            'titulo' => fake()->sentence(fake()->numberBetween(2, 5)),
+            'slug' => Str::slug($titulo).'-'.fake()->unique()->numerify('######'),
+            'titulo' => $titulo,
             'fecha_publicacion' => fake()->dateTimeBetween('-35 years', 'now')->format('Y-m-d'),
             'pais' => fake()->country(),
             'idioma' => fake()->randomElement([
