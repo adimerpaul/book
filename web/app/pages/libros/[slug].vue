@@ -31,6 +31,33 @@
               <span v-for="item in detailTags" :key="item">{{ item }}</span>
             </div>
 
+            <div v-if="book.precio !== null" class="detail-price-block card-surface">
+              <div>
+                <small>Precio del libro</small>
+                <strong>{{ formatPrice(book.precio) }}</strong>
+              </div>
+
+              <label class="quantity-field">
+                <span>Cantidad</span>
+                <input v-model.number="quantity" type="number" min="1">
+              </label>
+
+              <div class="detail-order-total">
+                <small>Total estimado</small>
+                <strong>{{ formatPrice(totalPrice) }}</strong>
+              </div>
+
+              <a
+                v-if="whatsAppHref"
+                :href="whatsAppHref"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn btn-primary"
+              >
+                Hacer un pedido
+              </a>
+            </div>
+
             <div class="detail-content card-surface">
               <h2>Descripcion</h2>
               <p>{{ book.contenido || book.resumen || 'Contenido editorial en actualizacion.' }}</p>
@@ -42,7 +69,7 @@
             </div>
 
             <div v-if="book.drive_indice_url" class="detail-actions">
-              <a :href="book.drive_indice_url" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+              <a :href="book.drive_indice_url" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
                 Ver indice
               </a>
             </div>
@@ -67,18 +94,32 @@
     </main>
 
     <SiteFooter />
+    <WhatsAppFloat :phone="whatsappNumber" :message="bookMessage" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { BookDetailResponse } from '~/types/books'
+import type { PublicCoxResponse } from '~/types/cox'
 
+const { $axios } = useNuxtApp()
 const route = useRoute()
 const slug = computed(() => String(route.params.slug))
+const quantity = ref(1)
 
 const { data, error } = await useAsyncData(
   () => `book-detail-${slug.value}`,
-  () => $fetch<BookDetailResponse>(`/api/libros/${slug.value}`),
+  async () => {
+    const [book, cox] = await Promise.all([
+      $axios.get<BookDetailResponse>(`/api/libros/${slug.value}`),
+      $axios.get<PublicCoxResponse>('/api/cox')
+    ])
+
+    return {
+      book: book.data,
+      cox: cox.data
+    }
+  },
   {
     watch: [slug]
   }
@@ -92,15 +133,17 @@ if (error.value) {
 }
 
 const book = computed(() => {
-  if (!data.value?.data) {
+  if (!data.value?.book.data) {
     throw createError({
       statusCode: 404,
       statusMessage: 'No se encontro el libro solicitado.'
     })
   }
 
-  return data.value.data
+  return data.value.book.data
 })
+
+const whatsappNumber = computed(() => data.value?.cox?.data?.whatsapp_number || null)
 
 const detailTags = computed(() =>
   [
@@ -113,6 +156,18 @@ const detailTags = computed(() =>
     book.value.fecha_publicacion ? formatDate(book.value.fecha_publicacion) : null
   ].filter(Boolean) as string[]
 )
+
+const totalPrice = computed(() => (book.value.precio || 0) * Math.max(1, quantity.value || 1))
+const bookMessage = computed(() => {
+  const qty = Math.max(1, quantity.value || 1)
+  const priceText = book.value.precio !== null ? formatPrice(totalPrice.value) : 'precio por confirmar'
+  return `Hola, quiero hacer un pedido del libro "${book.value.titulo}" en cantidad ${qty}. Total estimado: ${priceText}.`
+})
+const whatsAppHref = computed(() => {
+  const phone = (whatsappNumber.value || '').replace(/[^\d]/g, '')
+  if (!phone) return null
+  return `https://wa.me/${phone}?text=${encodeURIComponent(bookMessage.value)}`
+})
 
 useRevealOnScroll()
 
@@ -139,5 +194,13 @@ function formatDate(value: string) {
     month: 'long',
     year: 'numeric'
   }).format(new Date(`${value}T00:00:00`))
+}
+
+function formatPrice(value: number) {
+  return new Intl.NumberFormat('es-BO', {
+    style: 'currency',
+    currency: 'BOB',
+    minimumFractionDigits: 2
+  }).format(value)
 }
 </script>

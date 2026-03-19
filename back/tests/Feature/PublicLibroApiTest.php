@@ -15,11 +15,13 @@ it('returns only published books in public pagination', function () {
         'autor_id' => $autor->id,
         'titulo' => 'Libro oculto',
         'publicado_web' => false,
+        'precio' => 45.5,
     ]);
 
     Libro::factory()->count(2)->create([
         'autor_id' => $autor->id,
         'publicado_web' => true,
+        'precio' => 60,
     ]);
 
     $response = $this->getJson('/api/public/libros?per_page=1&page=1');
@@ -44,6 +46,7 @@ it('returns a published book by slug with detailed payload', function () {
         'publicado_web' => true,
         'contenido' => 'Contenido extenso del libro.',
         'resumen_contenido' => 'Resumen del libro.',
+        'precio' => 78.9,
     ]);
 
     $response = $this->getJson("/api/public/libros/{$libro->slug}");
@@ -52,7 +55,8 @@ it('returns a published book by slug with detailed payload', function () {
         ->assertJsonPath('data.slug', $libro->slug)
         ->assertJsonPath('data.titulo', 'Aulas que leen')
         ->assertJsonPath('data.autor.nombre', 'Carlos Medina')
-        ->assertJsonPath('data.contenido', 'Contenido extenso del libro.');
+        ->assertJsonPath('data.contenido', 'Contenido extenso del libro.')
+        ->assertJsonPath('data.precio', 78.9);
 });
 
 it('does not expose unpublished books in public detail', function () {

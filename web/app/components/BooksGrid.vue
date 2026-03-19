@@ -8,7 +8,15 @@
       </div>
 
       <div v-if="books.length" class="books-grid">
-        <article v-for="book in books" :key="book.id" class="book-card card-surface">
+        <article
+          v-for="book in books"
+          :key="book.id"
+          class="book-card card-surface"
+          role="link"
+          tabindex="0"
+          @click="handleCardClick($event, book.slug)"
+          @keydown.enter="openBook(book.slug)"
+        >
           <div class="book-cover" :class="{ 'has-image': Boolean(book.portada_url) }">
             <img
               v-if="book.portada_url"
@@ -27,13 +35,34 @@
             <span class="book-format">{{ book.subgenero || book.genero || 'Catalogo editorial' }}</span>
             <h3>{{ book.titulo }}</h3>
             <p class="book-author">{{ book.autor || 'Autor por confirmar' }}</p>
+            <p v-if="book.precio !== null" class="book-price">{{ formatPrice(book.precio) }}</p>
             <p>
               {{
                 book.resumen ||
                 'Libro disponible en el catalogo publicado de Latinas Editores con ficha de detalle.'
               }}
             </p>
-            <NuxtLink :to="`/libros/${book.slug}`" class="book-link">Ver detalle</NuxtLink>
+
+            <div v-if="book.precio !== null" class="book-order-inline">
+              <label class="book-quantity-inline">
+                <span>Cantidad</span>
+                <input v-model.number="quantities[book.id]" type="number" min="1" @click.stop>
+              </label>
+              <a
+                v-if="whatsAppHref(book)"
+                :href="whatsAppHref(book)"
+                class="btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click.stop
+              >
+                Pedir por WhatsApp
+              </a>
+            </div>
+
+            <div class="book-actions">
+              <NuxtLink :to="`/libros/${book.slug}`" class="book-link" @click.stop>Ver detalle</NuxtLink>
+            </div>
           </div>
         </article>
       </div>
@@ -53,9 +82,10 @@
 <script setup lang="ts">
 import type { BookListItem } from '~/types/books'
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     books: BookListItem[]
+    whatsappNumber?: string | null
     eyebrow?: string
     title?: string
     description?: string
@@ -63,6 +93,7 @@ withDefaults(
     showCatalogLink?: boolean
   }>(),
   {
+    whatsappNumber: null,
     eyebrow: 'Descubre nuestros libros',
     title: 'Un catalogo que combina literatura, pensamiento, formacion y sensibilidad editorial.',
     description:
@@ -71,4 +102,48 @@ withDefaults(
     showCatalogLink: false
   }
 )
+
+const router = useRouter()
+const quantities = reactive<Record<number, number>>({})
+
+watch(
+  () => props.books,
+  (items) => {
+    items.forEach((book) => {
+      if (!quantities[book.id]) {
+        quantities[book.id] = 1
+      }
+    })
+  },
+  { immediate: true }
+)
+
+function openBook(slug: string) {
+  router.push(`/libros/${slug}`)
+}
+
+function handleCardClick(event: MouseEvent, slug: string) {
+  const target = event.target as HTMLElement | null
+  if (target?.closest('a, button, input, label')) return
+  openBook(slug)
+}
+
+function formatPrice(value: number) {
+  return new Intl.NumberFormat('es-BO', {
+    style: 'currency',
+    currency: 'BOB',
+    minimumFractionDigits: 2
+  }).format(value)
+}
+
+function whatsAppHref(book: BookListItem) {
+  const phone = (props.whatsappNumber || '').replace(/[^\d]/g, '')
+  if (!phone || book.precio === null) return null
+  const quantity = Math.max(1, quantities[book.id] || 1)
+  const total = book.precio * quantity
+  const text = encodeURIComponent(
+    `Hola, quiero pedir el libro "${book.titulo}" en cantidad ${quantity}. Total estimado: ${formatPrice(total)}.`
+  )
+  return `https://wa.me/${phone}?text=${text}`
+}
 </script>

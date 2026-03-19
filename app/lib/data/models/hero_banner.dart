@@ -7,6 +7,7 @@ class HeroBannerItem {
     required this.badge,
     required this.theme,
     required this.primaryCtaLabel,
+    required this.coverUrls,
   });
 
   final int id;
@@ -16,6 +17,7 @@ class HeroBannerItem {
   final String badge;
   final String theme;
   final String primaryCtaLabel;
+  final List<String> coverUrls;
 
   factory HeroBannerItem.fromApi(Map<String, dynamic> json) {
     return HeroBannerItem(
@@ -25,8 +27,14 @@ class HeroBannerItem {
       description: (json['description'] as String? ?? '').trim(),
       badge: (json['badge'] as String? ?? '').trim(),
       theme: (json['theme'] as String? ?? 'terracota').trim(),
-      primaryCtaLabel:
-          (json['primary_cta_label'] as String? ?? 'Ver libros').trim(),
+      primaryCtaLabel: (json['primary_cta_label'] as String? ?? 'Ver libros')
+          .trim(),
+      coverUrls: ((json['covers'] as List?) ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map((item) => item['portada_url'] as String?)
+          .whereType<String>()
+          .where((value) => value.trim().isNotEmpty)
+          .toList(),
     );
   }
 }

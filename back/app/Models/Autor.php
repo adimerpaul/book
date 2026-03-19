@@ -31,4 +31,9 @@ class Autor extends Model implements AuditableContract
 //            'fecha_fallecimiento' => 'date',
 //        ];
 //    }
+
+    public function libros()
+    {
+        return $this->hasMany(Libro::class, 'autor_id');
+    }
 }

@@ -212,6 +212,23 @@
 
         <q-item
           dense
+          to="/cox"
+          exact
+          clickable
+          class="menu-item"
+          active-class="menu-active"
+          v-close-popup
+        >
+          <q-item-section avatar>
+            <q-icon name="settings_phone" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="menu-label">Cox</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item
+          dense
           to="/mis-graderias"
           exact
           clickable

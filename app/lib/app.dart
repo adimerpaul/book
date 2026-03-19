@@ -10,7 +10,7 @@ class LatinasEditoresApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Latinas Editores',
-      debugShowCheckedModeBanner: false,
+      //       debugShowCheckedModeBanner: true,
       theme: AppTheme.build(),
       home: const MainShellPage(),
     );

@@ -1,9 +1,8 @@
 import type { PublicHeroSliderResponse } from '~/types/hero-sliders'
+import { backendApi } from '../../utils/api'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
-
-  return await $fetch<PublicHeroSliderResponse>('/public/hero-sliders', {
-    baseURL: config.apiBase
-  })
+  const api = backendApi(event)
+  const { data } = await api.get<PublicHeroSliderResponse>('/public/hero-sliders')
+  return data
 })

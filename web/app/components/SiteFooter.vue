@@ -3,9 +3,11 @@
     <div class="container footer-grid">
       <div>
         <NuxtLink to="/#inicio" class="brand footer-brand">
-          <span class="brand-mark">EL</span>
+          <span class="brand-mark brand-mark-image">
+            <img src="/logo.png" alt="Latinas Editores">
+          </span>
           <span class="brand-copy">
-            <strong>Editores Latinas LTA</strong>
+            <strong>Latinas Editores</strong>
             <small>Libros que proyectan cultura</small>
           </span>
         </NuxtLink>

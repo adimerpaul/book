@@ -1,6 +1,5 @@
 import '../models/book.dart';
 import '../models/hero_banner.dart';
-import '../models/order.dart';
 
 class FallbackData {
   FallbackData._();
@@ -16,6 +15,7 @@ class FallbackData {
       subcategory: 'Novela',
       publisher: 'Latinas Editores',
       pages: 212,
+      price: 95,
       publishedAt: '2025-10-12',
       coverUrl: null,
       gallery: [],
@@ -31,6 +31,7 @@ class FallbackData {
       subcategory: 'Ensayo',
       publisher: 'Latinas Editores',
       pages: 176,
+      price: 78,
       publishedAt: '2024-07-03',
       coverUrl: null,
       gallery: [],
@@ -46,6 +47,7 @@ class FallbackData {
       subcategory: 'Coleccion de autor',
       publisher: 'Latinas Editores',
       pages: 98,
+      price: 62,
       publishedAt: '2025-01-20',
       coverUrl: null,
       gallery: [],
@@ -60,6 +62,7 @@ class FallbackData {
       subcategory: 'Pedagogia',
       publisher: 'Latinas Editores',
       pages: 240,
+      price: 88,
       publishedAt: '2023-11-11',
       coverUrl: null,
       gallery: [],
@@ -69,11 +72,13 @@ class FallbackData {
       slug: 'ciudad-hecha-de-papel',
       title: 'Ciudad hecha de papel',
       author: 'Lucia Andrade',
-      summary: 'Relatos breves que mezclan vida urbana y sensibilidad editorial.',
+      summary:
+          'Relatos breves que mezclan vida urbana y sensibilidad editorial.',
       category: 'Narrativa',
       subcategory: 'Cuento',
       publisher: 'Latinas Editores',
       pages: 144,
+      price: 70,
       publishedAt: '2024-02-18',
       coverUrl: null,
       gallery: [],
@@ -83,11 +88,13 @@ class FallbackData {
       slug: 'atlas-de-autoras',
       title: 'Atlas de autoras',
       author: 'Paola Rios',
-      summary: 'Una guia de lectura para descubrir nuevas voces latinoamericanas.',
+      summary:
+          'Una guia de lectura para descubrir nuevas voces latinoamericanas.',
       category: 'Critica',
       subcategory: 'Referencia',
       publisher: 'Latinas Editores',
       pages: 198,
+      price: 84,
       publishedAt: '2024-09-09',
       coverUrl: null,
       gallery: [],
@@ -99,36 +106,23 @@ class FallbackData {
       id: 1,
       eyebrow: 'Destacado de la semana',
       title: 'Historias que merecen quedarse contigo',
-      description: 'Encuentra novedades editoriales, recomendaciones y libros para pedir en pocos pasos.',
+      description:
+          'Encuentra novedades editoriales, recomendaciones y libros para pedir en pocos pasos.',
       badge: 'Nuevos ingresos',
       theme: 'terracota',
       primaryCtaLabel: 'Explorar catalogo',
+      coverUrls: [],
     ),
     HeroBannerItem(
       id: 2,
       eyebrow: 'Coleccion educativa',
       title: 'Libros pensados para lectura, aula y comunidad',
-      description: 'Filtra por autor, categoria o interes y prepara tu siguiente pedido desde el celular.',
+      description:
+          'Filtra por autor, categoria o interes y prepara tu siguiente pedido desde el celular.',
       badge: 'Mas consultados',
       theme: 'oliva',
       primaryCtaLabel: 'Ver recomendados',
-    ),
-  ];
-
-  static const List<OrderItem> orders = [
-    OrderItem(
-      id: 1,
-      code: 'PED-2401',
-      status: 'En preparacion',
-      createdAt: '19 Mar 2026',
-      totalBooks: 3,
-    ),
-    OrderItem(
-      id: 2,
-      code: 'PED-2398',
-      status: 'Entregado',
-      createdAt: '15 Mar 2026',
-      totalBooks: 2,
+      coverUrls: [],
     ),
   ];
 }

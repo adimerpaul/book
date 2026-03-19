@@ -167,6 +167,7 @@
                   <div class="col-12 col-md-6">
                     <q-input v-model="slider.secondary_cta_url" label="URL CTA secundario" dense outlined class="q-mb-xs" />
                   </div>
+
                 </div>
               </div>
 

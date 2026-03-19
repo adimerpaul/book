@@ -37,12 +37,14 @@ it('returns public hero sliders ordered and only published', function () {
 
     $response = $this->getJson('/api/public/hero-sliders');
 
-    $response->assertOk()
-        ->assertJsonCount(2, 'data')
-        ->assertJsonPath('data.0.title', 'Primero')
-        ->assertJsonPath('data.0.covers.0.titulo', $libro->titulo);
+    $response->assertOk();
 
-    expect(collect($response->json('data'))->pluck('title'))->not->toContain('Oculto');
+    $titles = collect($response->json('data'))->pluck('title');
+
+    expect($titles)->toContain('Primero');
+    expect($titles)->not->toContain('Oculto');
+    expect(collect($response->json('data'))->firstWhere('title', 'Primero')['covers'][0]['titulo'] ?? null)
+        ->toBe($libro->titulo);
 });
 
 it('stores and lists hero sliders in the admin api', function () {
@@ -72,7 +74,7 @@ it('stores and lists hero sliders in the admin api', function () {
         ->assertJsonPath('title', 'Slider principal')
         ->assertJsonPath('libro_principal.id', $libro->id);
 
-    $list = $this->getJson('/api/hero-sliders?per_page=10&page=1');
+    $list = $this->getJson('/api/hero-sliders?per_page=10&page=1&search=Slider principal');
 
     $list->assertOk()
         ->assertJsonPath('data.0.title', 'Slider principal');

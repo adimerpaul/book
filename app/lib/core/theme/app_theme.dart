@@ -38,16 +38,8 @@ class AppTheme {
           fontWeight: FontWeight.w600,
           color: text,
         ),
-        bodyLarge: TextStyle(
-          fontSize: 15,
-          height: 1.4,
-          color: text,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14,
-          height: 1.35,
-          color: text,
-        ),
+        bodyLarge: TextStyle(fontSize: 15, height: 1.4, color: text),
+        bodyMedium: TextStyle(fontSize: 14, height: 1.35, color: text),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
@@ -62,7 +54,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 18,
+          vertical: 16,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide.none,

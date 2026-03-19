@@ -9,6 +9,7 @@ class Book {
     required this.subcategory,
     required this.publisher,
     required this.pages,
+    required this.price,
     required this.publishedAt,
     required this.coverUrl,
     required this.gallery,
@@ -24,6 +25,7 @@ class Book {
   final String subcategory;
   final String publisher;
   final int pages;
+  final double? price;
   final String publishedAt;
   final String? coverUrl;
   final List<String> gallery;
@@ -40,6 +42,7 @@ class Book {
       subcategory: (json['subgenero'] as String? ?? '').trim(),
       publisher: (json['editorial'] as String? ?? '').trim(),
       pages: (json['paginas'] as num?)?.toInt() ?? 0,
+      price: (json['precio'] as num?)?.toDouble(),
       publishedAt: (json['fecha_publicacion'] as String? ?? '').trim(),
       coverUrl: (json['portada_url'] as String?)?.trim(),
       gallery: ((json['fotografias'] as List?) ?? const [])
@@ -59,6 +62,7 @@ class Book {
       subcategory: (map['subcategory'] as String? ?? '').trim(),
       publisher: (map['publisher'] as String? ?? '').trim(),
       pages: (map['pages'] as num?)?.toInt() ?? 0,
+      price: (map['price'] as num?)?.toDouble(),
       publishedAt: (map['published_at'] as String? ?? '').trim(),
       coverUrl: (map['cover_url'] as String?)?.trim(),
       gallery: (map['gallery'] as String? ?? '')
@@ -80,6 +84,7 @@ class Book {
       'subcategory': subcategory,
       'publisher': publisher,
       'pages': pages,
+      'price': price,
       'published_at': publishedAt,
       'cover_url': coverUrl,
       'gallery': gallery.join('|'),
@@ -98,6 +103,7 @@ class Book {
       subcategory: subcategory,
       publisher: publisher,
       pages: pages,
+      price: price,
       publishedAt: publishedAt,
       coverUrl: coverUrl,
       gallery: gallery,

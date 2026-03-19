@@ -5,7 +5,7 @@ import '../../data/services/order_repository.dart';
 
 class OrdersViewModel extends ChangeNotifier {
   OrdersViewModel({OrderRepository? repository})
-      : _repository = repository ?? OrderRepository();
+    : _repository = repository ?? OrderRepository();
 
   final OrderRepository _repository;
 

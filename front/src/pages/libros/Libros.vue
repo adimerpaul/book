@@ -306,6 +306,20 @@
                   </div>
 
                   <div class="col-12 col-md-4">
+                    <q-input
+                      v-model.number="libro.precio"
+                      label="Precio"
+                      dense
+                      outlined
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      prefix="Bs"
+                      class="q-mb-xs"
+                    />
+                  </div>
+
+                  <div class="col-12 col-md-4">
                     <q-toggle
                       v-model="libro.publicado_web"
                       color="positive"
@@ -555,6 +569,7 @@ export default {
         { name: 'genero', label: 'Genero', align: 'left', field: 'genero' },
         { name: 'editorial', label: 'Editorial', align: 'left', field: 'editorial' },
         { name: 'paginas', label: 'Paginas', align: 'right', field: 'paginas' },
+        { name: 'precio', label: 'Precio', align: 'right', field: row => row.precio ?? '' },
         { name: 'fotografias_count', label: 'Fotos', align: 'center', field: 'fotografias_count' },
         { name: 'publicado_web', label: 'Web', align: 'center', field: 'publicado_web' },
         { name: 'drive_indice_url', label: 'Indice', align: 'left', field: 'drive_indice_url' }
@@ -626,6 +641,7 @@ export default {
         subgenero: '',
         editorial: '',
         paginas: null,
+        precio: 100,
         contenido: '',
         resumen_contenido: '',
         reconocimiento: '',
@@ -644,6 +660,7 @@ export default {
         autor_id: row.autor_id,
         fecha_publicacion: row.fecha_publicacion || '',
         paginas: row.paginas || null,
+        precio: row.precio !== null && row.precio !== undefined ? Number(row.precio) : 100,
         publicado_web: !!row.publicado_web
       }
       this.resetArchivos()

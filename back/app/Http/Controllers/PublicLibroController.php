@@ -76,6 +76,7 @@ class PublicLibroController extends Controller
             'subgenero' => $libro->subgenero,
             'editorial' => $libro->editorial,
             'paginas' => $libro->paginas,
+            'precio' => $libro->precio !== null ? (float) $libro->precio : null,
             'fecha_publicacion' => $libro->fecha_publicacion?->toDateString(),
             'portada_url' => $this->buildImageUrl($libro->portada),
             'fotografias' => $libro->fotografias
@@ -105,6 +106,7 @@ class PublicLibroController extends Controller
             'idioma' => $libro->idioma,
             'pais' => $libro->pais,
             'paginas' => $libro->paginas,
+            'precio' => $libro->precio !== null ? (float) $libro->precio : null,
             'fecha_publicacion' => $libro->fecha_publicacion?->toDateString(),
             'drive_indice_url' => $libro->drive_indice_url,
             'portada_url' => $this->buildImageUrl($libro->portada),

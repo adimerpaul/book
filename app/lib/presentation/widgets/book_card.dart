@@ -74,6 +74,14 @@ class BookCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyMedium,
                   ),
+                  const SizedBox(height: 10),
+                  if (book.price != null)
+                    Text(
+                      'Bs ${book.price!.toStringAsFixed(2)}',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: const Color(0xFF8C3B2F),
+                      ),
+                    ),
                   const SizedBox(height: 14),
                   Row(
                     children: [

@@ -46,6 +46,16 @@ class _OrdersPageState extends State<OrdersPage> {
               const SizedBox(height: 24),
               if (_viewModel.isLoading)
                 const Center(child: CircularProgressIndicator())
+              else if (_viewModel.orders.isEmpty)
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      'Aun no tienes pedidos guardados. Cuando registremos compras, apareceran aqui desde SQLite.',
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                  ),
+                )
               else
                 ..._viewModel.orders.map(
                   (order) => Card(
@@ -58,7 +68,10 @@ class _OrdersPageState extends State<OrdersPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(order.code, style: theme.textTheme.titleMedium),
+                              Text(
+                                order.code,
+                                style: theme.textTheme.titleMedium,
+                              ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 10,

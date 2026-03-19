@@ -25,6 +25,11 @@ const routes = [
         meta: {requiresAuth: true}
       },
       {
+        path: '/cox',
+        component: () => import('pages/cox/Cox.vue'),
+        meta: {requiresAuth: true}
+      },
+      {
         path:'/cambiar-contrasena',
         component: () => import('pages/cambiar-contrasena/CambiarContrasena.vue'),
         meta: { requiresAuth: true }

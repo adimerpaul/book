@@ -37,6 +37,7 @@
 
       <BooksGrid
         :books="books.data"
+        :whatsapp-number="whatsappNumber"
         eyebrow="Catalogo disponible"
         title="Todos los libros publicados"
         description="Cada ficha enlaza a una pagina propia con informacion ampliada, preparada para SEO y lectura detallada."
@@ -79,12 +80,15 @@
     </main>
 
     <SiteFooter />
+    <WhatsAppFloat :phone="whatsappNumber" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { PaginatedBooksResponse } from '~/types/books'
+import type { PublicCoxResponse } from '~/types/cox'
 
+const { $axios } = useNuxtApp()
 const route = useRoute()
 const router = useRouter()
 const page = computed(() => {
@@ -95,15 +99,24 @@ const search = computed(() => String(route.query.q ?? '').trim())
 const searchInput = ref(search.value)
 
 const { data, error } = await useAsyncData(
-  () => `catalog-books-${page.value}-${search.value}`,
-  () =>
-    $fetch<PaginatedBooksResponse>('/api/libros', {
-      query: {
-        page: page.value,
-        per_page: 9,
-        search: search.value || undefined
-      }
-    }),
+  () => `catalog-page-${page.value}-${search.value}`,
+  async () => {
+    const [books, cox] = await Promise.all([
+      $axios.get<PaginatedBooksResponse>('/api/libros', {
+        params: {
+          page: page.value,
+          per_page: 9,
+          search: search.value || undefined
+        }
+      }),
+      $axios.get<PublicCoxResponse>('/api/cox')
+    ])
+
+    return {
+      books: books.data,
+      cox: cox.data
+    }
+  },
   {
     watch: [page, search]
   }
@@ -118,7 +131,7 @@ if (error.value) {
 
 const books = computed<PaginatedBooksResponse>(() => {
   return (
-    data.value ?? {
+    data.value?.books ?? {
       data: [],
       meta: {
         current_page: 1,
@@ -135,6 +148,8 @@ const books = computed<PaginatedBooksResponse>(() => {
     }
   )
 })
+
+const whatsappNumber = computed(() => data.value?.cox?.data?.whatsapp_number || null)
 
 useRevealOnScroll()
 

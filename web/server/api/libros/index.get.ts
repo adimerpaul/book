@@ -1,11 +1,13 @@
 import type { PaginatedBooksResponse } from '~/types/books'
+import { backendApi } from '../../utils/api'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
+  const api = backendApi(event)
   const query = getQuery(event)
 
-  return await $fetch<PaginatedBooksResponse>('/public/libros', {
-    baseURL: config.apiBase,
-    query
+  const { data } = await api.get<PaginatedBooksResponse>('/public/libros', {
+    params: query
   })
+
+  return data
 })

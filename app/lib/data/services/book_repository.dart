@@ -1,15 +1,14 @@
 import '../models/book.dart';
+import '../models/catalog_filters.dart';
 import '../models/hero_banner.dart';
 import 'book_api_service.dart';
 import 'book_local_database.dart';
 import 'fallback_data.dart';
 
 class BookRepository {
-  BookRepository({
-    BookApiService? apiService,
-    BookLocalDatabase? localDatabase,
-  })  : _apiService = apiService ?? BookApiService(),
-        _localDatabase = localDatabase ?? BookLocalDatabase.instance;
+  BookRepository({BookApiService? apiService, BookLocalDatabase? localDatabase})
+    : _apiService = apiService ?? BookApiService(),
+      _localDatabase = localDatabase ?? BookLocalDatabase.instance;
 
   final BookApiService _apiService;
   final BookLocalDatabase _localDatabase;
@@ -47,6 +46,57 @@ class BookRepository {
     return FallbackData.banners;
   }
 
+  Future<CatalogFilters> getCatalogFilters() async {
+    try {
+      final remoteFilters = await _apiService.fetchCatalogFilters();
+      if (remoteFilters.categories.isNotEmpty ||
+          remoteFilters.authors.isNotEmpty) {
+        return remoteFilters;
+      }
+    } catch (_) {
+      // Si el endpoint aun no esta disponible, se arman filtros locales.
+    }
+
+    final books = await _localDatabase.getBooks();
+    final source = books.isNotEmpty ? books : FallbackData.books;
+
+    final categories =
+        source
+            .map((book) => book.category)
+            .where((value) => value.trim().isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
+    final authors =
+        source
+            .map((book) => book.author)
+            .where((value) => value.trim().isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
+
+    return CatalogFilters(
+      categories: categories
+          .map(
+            (name) => CategoryFilter(
+              name: name,
+              total: source.where((book) => book.category == name).length,
+            ),
+          )
+          .toList(),
+      authors: authors
+          .map(
+            (name) => AuthorFilter(
+              id: 0,
+              name: name,
+              photoUrl: null,
+              total: source.where((book) => book.author == name).length,
+            ),
+          )
+          .toList(),
+    );
+  }
+
   Future<void> toggleFavorite(Book book) async {
     await _localDatabase.updateFavorite(book.id, !book.isFavorite);
   }
@@ -58,7 +108,9 @@ class BookRepository {
     };
 
     final merged = remoteBooks
-        .map((book) => book.copyWith(isFavorite: favoritesById[book.id] ?? false))
+        .map(
+          (book) => book.copyWith(isFavorite: favoritesById[book.id] ?? false),
+        )
         .toList();
 
     await _localDatabase.replaceBooks(merged);

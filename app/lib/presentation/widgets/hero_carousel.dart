@@ -101,6 +101,31 @@ class _HeroCarouselState extends State<HeroCarousel> {
                             height: 1.3,
                           ),
                         ),
+                        if (item.coverUrls.isNotEmpty) ...[
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            height: 46,
+                            child: Row(
+                              children: item.coverUrls.take(3).map((url) {
+                                return Container(
+                                  width: 32,
+                                  margin: const EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.white24,
+                                  ),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Image.network(
+                                    url,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, _, _) =>
+                                        const SizedBox.shrink(),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),

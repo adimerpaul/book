@@ -147,6 +147,7 @@ class LibroController extends Controller
             'subgenero' => 'nullable|string|max:255',
             'editorial' => 'nullable|string|max:255',
             'paginas' => 'nullable|integer|min:1',
+            'precio' => 'nullable|numeric|min:0|max:999999.99',
             'contenido' => 'nullable|string|max:20000',
             'resumen_contenido' => 'nullable|string|max:5000',
             'reconocimiento' => 'nullable|string|max:4000',

@@ -26,6 +26,7 @@ class Libro extends Model implements AuditableContract
         'subgenero',
         'editorial',
         'paginas',
+        'precio',
         'contenido',
         'resumen_contenido',
         'reconocimiento',
@@ -38,6 +39,7 @@ class Libro extends Model implements AuditableContract
     {
         return [
             'fecha_publicacion' => 'date',
+            'precio' => 'decimal:2',
             'publicado_web' => 'boolean',
         ];
     }
@@ -45,6 +47,10 @@ class Libro extends Model implements AuditableContract
     protected static function booted(): void
     {
         static::saving(function (self $libro) {
+            if ($libro->precio === null) {
+                $libro->precio = 100;
+            }
+
             if (!$libro->isDirty('titulo') && filled($libro->slug)) {
                 return;
             }

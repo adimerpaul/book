@@ -1,10 +1,12 @@
 <template>
   <header class="site-header">
     <div class="container header-inner">
-      <NuxtLink to="/#inicio" class="brand" aria-label="Ir al inicio de Editores Latinas LTA">
-        <span class="brand-mark">EL</span>
+      <NuxtLink to="/#inicio" class="brand" aria-label="Ir al inicio de Latinas Editores">
+        <span class="brand-mark brand-mark-image">
+          <img src="/logo.png" alt="Latinas Editores">
+        </span>
         <span class="brand-copy">
-          <strong>Editores Latinas LTA</strong>
+          <strong>Latinas Editores</strong>
           <small>Editorial y libreria digital</small>
         </span>
       </NuxtLink>

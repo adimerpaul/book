@@ -16,11 +16,7 @@ class _MainShellPageState extends State<MainShellPage> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
-      const HomePage(),
-      const OrdersPage(),
-      const CartPage(),
-    ];
+    final pages = [const HomePage(), const OrdersPage(), const CartPage()];
 
     return Scaffold(
       body: IndexedStack(index: _currentIndex, children: pages),

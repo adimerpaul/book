@@ -8,6 +8,7 @@
       <MissionVisionSection />
       <BooksGrid
         :books="books.data"
+        :whatsapp-number="whatsappNumber"
         title="Novedades publicadas y libros disponibles"
         description="La web ahora consulta el catalogo publicado desde la API y enlaza cada libro con una pagina propia."
         :show-catalog-link="true"
@@ -17,28 +18,34 @@
     </main>
 
     <SiteFooter />
+    <WhatsAppFloat :phone="whatsappNumber" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { PaginatedBooksResponse } from '~/types/books'
+import type { PublicCoxResponse } from '~/types/cox'
 import type { PublicHeroSliderResponse } from '~/types/hero-sliders'
 import { benefits } from '~/data/site'
 
+const { $axios } = useNuxtApp()
+
 const { data, error } = await useAsyncData('home-content', async () => {
-  const [hero, books] = await Promise.all([
-    $fetch<PublicHeroSliderResponse>('/api/hero-sliders'),
-    $fetch<PaginatedBooksResponse>('/api/libros', {
-      query: {
+  const [hero, books, cox] = await Promise.all([
+    $axios.get<PublicHeroSliderResponse>('/api/hero-sliders'),
+    $axios.get<PaginatedBooksResponse>('/api/libros', {
+      params: {
         page: 1,
         per_page: 6
       }
-    })
+    }),
+    $axios.get<PublicCoxResponse>('/api/cox')
   ])
 
   return {
-    hero,
-    books
+    hero: hero.data,
+    books: books.data,
+    cox: cox.data
   }
 })
 
@@ -49,7 +56,8 @@ if (error.value) {
   })
 }
 
-const heroSlides = computed(() => data.value?.hero.data || [])
+const heroSlides = computed<PublicHeroSliderResponse['data']>(() => data.value?.hero?.data ?? [])
+const whatsappNumber = computed(() => data.value?.cox?.data?.whatsapp_number || null)
 
 const books = computed<PaginatedBooksResponse>(() => {
   return (

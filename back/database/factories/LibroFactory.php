@@ -47,6 +47,7 @@ class LibroFactory extends Factory
                 'Letra Viva',
             ]),
             'paginas' => fake()->numberBetween(80, 780),
+            'precio' => fake()->randomFloat(2, 100, 180),
             'contenido' => fake()->paragraphs(fake()->numberBetween(4, 8), true),
             'resumen_contenido' => fake()->paragraphs(2, true),
             'reconocimiento' => fake()->boolean(35)

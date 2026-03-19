@@ -79,7 +79,8 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 24),
                 SectionHeader(
                   title: 'Favoritos para pedir',
-                  subtitle: 'Una mezcla de recomendados, novedades y libros guardados.',
+                  subtitle:
+                      'Una mezcla de recomendados, novedades y libros guardados.',
                   actionLabel: '${_viewModel.featuredBooks.length} destacados',
                 ),
                 const SizedBox(height: 14),

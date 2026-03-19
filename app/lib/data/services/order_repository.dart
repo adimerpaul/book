@@ -1,9 +1,13 @@
 import '../models/order.dart';
-import 'fallback_data.dart';
+import 'book_local_database.dart';
 
 class OrderRepository {
+  OrderRepository({BookLocalDatabase? localDatabase})
+    : _localDatabase = localDatabase ?? BookLocalDatabase.instance;
+
+  final BookLocalDatabase _localDatabase;
+
   Future<List<OrderItem>> getOrders() async {
-    await Future<void>.delayed(const Duration(milliseconds: 150));
-    return FallbackData.orders;
+    return _localDatabase.getOrders();
   }
 }

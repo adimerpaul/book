@@ -8,6 +8,7 @@ export type BookListItem = {
   subgenero: string | null
   editorial: string | null
   paginas: number | null
+  precio: number | null
   fecha_publicacion: string | null
   portada_url: string | null
   fotografias: string[]
@@ -30,6 +31,7 @@ export type BookDetail = {
   idioma: string | null
   pais: string | null
   paginas: number | null
+  precio: number | null
   fecha_publicacion: string | null
   drive_indice_url: string | null
   portada_url: string | null

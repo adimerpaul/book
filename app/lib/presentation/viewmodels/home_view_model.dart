@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 
 import '../../data/models/book.dart';
+import '../../data/models/catalog_filters.dart';
 import '../../data/models/hero_banner.dart';
 import '../../data/services/book_repository.dart';
 
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({BookRepository? repository})
-      : _repository = repository ?? BookRepository();
+    : _repository = repository ?? BookRepository();
 
   final BookRepository _repository;
 
@@ -18,6 +19,7 @@ class HomeViewModel extends ChangeNotifier {
   List<Book> _allBooks = const [];
   List<Book> books = const [];
   List<HeroBannerItem> banners = const [];
+  CatalogFilters filters = const CatalogFilters(categories: [], authors: []);
 
   Future<void> initialize() async {
     isLoading = true;
@@ -28,10 +30,12 @@ class HomeViewModel extends ChangeNotifier {
       final results = await Future.wait([
         _repository.getBooks(),
         _repository.getHeroBanners(),
+        _repository.getCatalogFilters(),
       ]);
 
       _allBooks = results[0] as List<Book>;
       banners = results[1] as List<HeroBannerItem>;
+      filters = results[2] as CatalogFilters;
       _applyFilters();
     } catch (_) {
       errorMessage = 'No pudimos cargar el catalogo en este momento.';
@@ -44,16 +48,17 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   List<String> get categories {
-    final values = _allBooks.map((book) => book.category).toSet().toList()..sort();
+    final values = filters.categories.map((item) => item.name).toList();
     return ['Todos', ...values];
   }
 
   List<String> get authors {
-    final values = _allBooks.map((book) => book.author).toSet().toList()..sort();
+    final values = filters.authors.map((item) => item.name).toList();
     return ['Todos', ...values];
   }
 
-  List<Book> get featuredBooks => books.where((book) => book.isFavorite).toList();
+  List<Book> get featuredBooks =>
+      books.where((book) => book.isFavorite).toList();
 
   void updateSearch(String value) {
     search = value;
@@ -86,7 +91,8 @@ class HomeViewModel extends ChangeNotifier {
   void _applyFilters() {
     final normalizedSearch = search.trim().toLowerCase();
     books = _allBooks.where((book) {
-      final matchesSearch = normalizedSearch.isEmpty ||
+      final matchesSearch =
+          normalizedSearch.isEmpty ||
           book.title.toLowerCase().contains(normalizedSearch) ||
           book.author.toLowerCase().contains(normalizedSearch) ||
           book.category.toLowerCase().contains(normalizedSearch) ||

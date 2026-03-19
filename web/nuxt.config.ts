@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
-    apiBase: process.env.NUXT_API_BASE || 'http://localhost:8000/api',
+    apiBase: process.env.NUXT_API_BASE || 'http://192.168.1.8:8000/api',
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'http://localhost:3000'
     }
@@ -12,6 +12,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'Editores Latinas LTA',
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/logo.png' },
+        { rel: 'apple-touch-icon', href: '/logo.png' }
+      ],
       meta: [
         {
           name: 'description',
