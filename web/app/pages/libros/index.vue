@@ -12,6 +12,16 @@
               Explora nuestro catalogo activo con informacion editorial, autores y descripciones
               completas preparadas para una experiencia web indexable.
             </p>
+
+            <form class="catalog-search" @submit.prevent="applySearch">
+              <input
+                v-model="searchInput"
+                type="search"
+                placeholder="Buscar por titulo, genero o autor"
+                aria-label="Buscar libros"
+              >
+              <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
           </div>
 
           <div class="catalog-meta card-surface">
@@ -76,22 +86,26 @@
 import type { PaginatedBooksResponse } from '~/types/books'
 
 const route = useRoute()
+const router = useRouter()
 const page = computed(() => {
   const value = Number(route.query.page ?? 1)
   return Number.isFinite(value) && value > 0 ? Math.floor(value) : 1
 })
+const search = computed(() => String(route.query.q ?? '').trim())
+const searchInput = ref(search.value)
 
 const { data, error } = await useAsyncData(
-  () => `catalog-books-${page.value}`,
+  () => `catalog-books-${page.value}-${search.value}`,
   () =>
     $fetch<PaginatedBooksResponse>('/api/libros', {
       query: {
         page: page.value,
-        per_page: 9
+        per_page: 9,
+        search: search.value || undefined
       }
     }),
   {
-    watch: [page]
+    watch: [page, search]
   }
 )
 
@@ -126,22 +140,42 @@ useRevealOnScroll()
 
 useSeoMeta({
   title: computed(() =>
-    page.value > 1
-      ? `Libros publicados | Pagina ${page.value} | Editores Latinas LTA`
-      : 'Libros publicados | Editores Latinas LTA'
+    search.value
+      ? `Buscar libros: ${search.value} | Editores Latinas LTA`
+      : page.value > 1
+        ? `Libros publicados | Pagina ${page.value} | Editores Latinas LTA`
+        : 'Libros publicados | Editores Latinas LTA'
   ),
-  description:
-    'Catalogo paginado de libros publicados por Editores Latinas LTA con fichas editoriales, autores y descripciones completas.',
-  ogTitle: 'Catalogo de libros | Editores Latinas LTA',
-  ogDescription:
-    'Explora los libros publicados de Latinas Editores en una experiencia pensada para descubrimiento y SEO.',
+  description: computed(() =>
+    search.value
+      ? `Resultados para "${search.value}" dentro del catalogo publicado de Editores Latinas LTA.`
+      : 'Catalogo paginado de libros publicados por Editores Latinas LTA con fichas editoriales, autores y descripciones completas.'
+  ),
+  ogTitle: computed(() =>
+    search.value ? `Buscar libros: ${search.value} | Editores Latinas LTA` : 'Catalogo de libros | Editores Latinas LTA'
+  ),
+  ogDescription: computed(() =>
+    search.value
+      ? `Explora coincidencias para ${search.value} dentro del catalogo publicado de Latinas Editores.`
+      : 'Explora los libros publicados de Latinas Editores en una experiencia pensada para descubrimiento y SEO.'
+  ),
   ogType: 'website'
 })
 
 function pageLink(targetPage: number) {
   return {
     path: '/libros',
-    query: targetPage > 1 ? { page: String(targetPage) } : {}
+    query: {
+      ...(targetPage > 1 ? { page: String(targetPage) } : {}),
+      ...(search.value ? { q: search.value } : {})
+    }
   }
+}
+
+function applySearch() {
+  router.push({
+    path: '/libros',
+    query: searchInput.value ? { q: searchInput.value } : {}
+  })
 }
 </script>

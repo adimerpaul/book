@@ -22,27 +22,38 @@
 
 <script setup lang="ts">
 import type { PaginatedBooksResponse } from '~/types/books'
-import { benefits, heroSlides } from '~/data/site'
+import type { PublicHeroSliderResponse } from '~/types/hero-sliders'
+import { benefits } from '~/data/site'
 
-const { data, error } = await useAsyncData('home-books', () =>
-  $fetch<PaginatedBooksResponse>('/api/libros', {
-    query: {
-      page: 1,
-      per_page: 6
-    }
-  })
-)
+const { data, error } = await useAsyncData('home-content', async () => {
+  const [hero, books] = await Promise.all([
+    $fetch<PublicHeroSliderResponse>('/api/hero-sliders'),
+    $fetch<PaginatedBooksResponse>('/api/libros', {
+      query: {
+        page: 1,
+        per_page: 6
+      }
+    })
+  ])
+
+  return {
+    hero,
+    books
+  }
+})
 
 if (error.value) {
   throw createError({
     statusCode: error.value.statusCode || 500,
-    statusMessage: 'No fue posible cargar los libros publicados.'
+    statusMessage: 'No fue posible cargar el contenido principal de la web.'
   })
 }
 
+const heroSlides = computed(() => data.value?.hero.data || [])
+
 const books = computed<PaginatedBooksResponse>(() => {
   return (
-    data.value ?? {
+    data.value?.books ?? {
       data: [],
       meta: {
         current_page: 1,

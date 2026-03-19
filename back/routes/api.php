@@ -3,10 +3,13 @@
 //use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\HeroSliderController;
 use App\Http\Controllers\LibroController;
+use App\Http\Controllers\PublicHeroSliderController;
 use App\Http\Controllers\PublicLibroController;
 
 Route::post('/login', [App\Http\Controllers\UserController::class, 'login']);
+Route::get('/public/hero-sliders', [PublicHeroSliderController::class, 'index']);
 Route::get('/public/libros', [PublicLibroController::class, 'index']);
 Route::get('/public/libros/{slug}', [PublicLibroController::class, 'show']);
 
@@ -45,4 +48,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/libros/{libro}/portada', [LibroController::class, 'updatePortada']);
     Route::post('/libros/{libro}/fotografias', [LibroController::class, 'addFotografias']);
     Route::delete('/libros/{libro}/fotografias/{fotografia}', [LibroController::class, 'removeFotografia']);
+
+    Route::get('/hero-sliders', [HeroSliderController::class, 'index']);
+    Route::get('/hero-sliders/{heroSlider}', [HeroSliderController::class, 'show']);
+    Route::post('/hero-sliders', [HeroSliderController::class, 'store']);
+    Route::put('/hero-sliders/{heroSlider}', [HeroSliderController::class, 'update']);
+    Route::delete('/hero-sliders/{heroSlider}', [HeroSliderController::class, 'destroy']);
 });

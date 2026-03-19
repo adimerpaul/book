@@ -405,6 +405,7 @@ select {
   position: absolute;
   border-radius: 20px;
   box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
 }
 
 .cover-main {
@@ -436,6 +437,26 @@ select {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.35rem;
   font-weight: 700;
+}
+
+.cover-link img,
+.cover-link .cover-fallback {
+  width: 100%;
+  height: 100%;
+}
+
+.cover-link img {
+  display: block;
+  object-fit: cover;
+}
+
+.cover-fallback {
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  color: white;
+  font-family: Georgia, "Times New Roman", serif;
+  background: linear-gradient(145deg, #8a161f 0%, #d67865 100%);
 }
 
 .cover-side {
@@ -483,7 +504,7 @@ select {
 .hero-controls {
   position: absolute;
   left: 50%;
-  bottom: 1.4rem;
+  bottom: 2.2rem;
   display: flex;
   gap: 0.65rem;
   transform: translateX(-50%);
@@ -594,6 +615,8 @@ select {
 }
 
 .book-card {
+  display: grid;
+  grid-template-rows: 320px 1fr;
   overflow: hidden;
   transition:
     transform 220ms ease,
@@ -607,7 +630,8 @@ select {
 
 .book-cover {
   position: relative;
-  min-height: 310px;
+  min-height: 320px;
+  height: 320px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -637,6 +661,29 @@ select {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.catalog-search {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.catalog-search input {
+  flex: 1 1 320px;
+  min-height: 54px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 23, 23, 0.12);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.catalog-search input:focus {
+  outline: 2px solid rgba(166, 29, 36, 0.18);
+  border-color: rgba(166, 29, 36, 0.22);
 }
 
 .book-cover strong,
@@ -1075,6 +1122,7 @@ select {
 
   .book-cover {
     min-height: 260px;
+    height: 260px;
   }
 
   .book-detail-cover {
