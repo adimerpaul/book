@@ -98,23 +98,45 @@ const page = computed(() => {
 const search = computed(() => String(route.query.q ?? '').trim())
 const searchInput = ref(search.value)
 
-const { data, error } = await useAsyncData(
+const emptyBooks: PaginatedBooksResponse = {
+  data: [],
+  meta: {
+    current_page: 1,
+    last_page: 1,
+    per_page: 9,
+    total: 0,
+    from: null,
+    to: null
+  },
+  links: {
+    prev: null,
+    next: null
+  }
+}
+
+const emptyCox: PublicCoxResponse = {
+  data: {
+    whatsapp_number: null
+  }
+}
+
+const { data } = await useAsyncData(
   () => `catalog-page-${page.value}-${search.value}`,
   async () => {
-    const [books, cox] = await Promise.all([
+    const [books, cox] = await Promise.allSettled([
       $axios.get<PaginatedBooksResponse>('/api/libros', {
         params: {
           page: page.value,
           per_page: 9,
           search: search.value || undefined
         }
-      }),
-      $axios.get<PublicCoxResponse>('/api/cox')
+      }).then((response) => response.data),
+      $axios.get<PublicCoxResponse>('/api/cox').then((response) => response.data)
     ])
 
     return {
-      books: books.data,
-      cox: cox.data
+      books: books.status === 'fulfilled' ? books.value : emptyBooks,
+      cox: cox.status === 'fulfilled' ? cox.value : emptyCox
     }
   },
   {
@@ -122,31 +144,8 @@ const { data, error } = await useAsyncData(
   }
 )
 
-if (error.value) {
-  throw createError({
-    statusCode: error.value.statusCode || 500,
-    statusMessage: 'No fue posible cargar el catalogo de libros.'
-  })
-}
-
 const books = computed<PaginatedBooksResponse>(() => {
-  return (
-    data.value?.books ?? {
-      data: [],
-      meta: {
-        current_page: 1,
-        last_page: 1,
-        per_page: 9,
-        total: 0,
-        from: null,
-        to: null
-      },
-      links: {
-        prev: null,
-        next: null
-      }
-    }
-  )
+  return data.value?.books ?? emptyBooks
 })
 
 const whatsappNumber = computed(() => data.value?.cox?.data?.whatsapp_number || null)

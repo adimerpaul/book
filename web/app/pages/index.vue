@@ -30,53 +30,56 @@ import { benefits } from '~/data/site'
 
 const { $axios } = useNuxtApp()
 
-const { data, error } = await useAsyncData('home-content', async () => {
-  const [hero, books, cox] = await Promise.all([
-    $axios.get<PublicHeroSliderResponse>('/api/hero-sliders'),
+const emptyBooks: PaginatedBooksResponse = {
+  data: [],
+  meta: {
+    current_page: 1,
+    last_page: 1,
+    per_page: 6,
+    total: 0,
+    from: null,
+    to: null
+  },
+  links: {
+    prev: null,
+    next: null
+  }
+}
+
+const emptyHero: PublicHeroSliderResponse = {
+  data: []
+}
+
+const emptyCox: PublicCoxResponse = {
+  data: {
+    whatsapp_number: null
+  }
+}
+
+const { data } = await useAsyncData('home-content', async () => {
+  const [hero, books, cox] = await Promise.allSettled([
+    $axios.get<PublicHeroSliderResponse>('/api/hero-sliders').then((response) => response.data),
     $axios.get<PaginatedBooksResponse>('/api/libros', {
       params: {
         page: 1,
         per_page: 6
       }
-    }),
-    $axios.get<PublicCoxResponse>('/api/cox')
+    }).then((response) => response.data),
+    $axios.get<PublicCoxResponse>('/api/cox').then((response) => response.data)
   ])
 
   return {
-    hero: hero.data,
-    books: books.data,
-    cox: cox.data
+    hero: hero.status === 'fulfilled' ? hero.value : emptyHero,
+    books: books.status === 'fulfilled' ? books.value : emptyBooks,
+    cox: cox.status === 'fulfilled' ? cox.value : emptyCox
   }
 })
-
-if (error.value) {
-  throw createError({
-    statusCode: error.value.statusCode || 500,
-    statusMessage: 'No fue posible cargar el contenido principal de la web.'
-  })
-}
 
 const heroSlides = computed<PublicHeroSliderResponse['data']>(() => data.value?.hero?.data ?? [])
 const whatsappNumber = computed(() => data.value?.cox?.data?.whatsapp_number || null)
 
 const books = computed<PaginatedBooksResponse>(() => {
-  return (
-    data.value?.books ?? {
-      data: [],
-      meta: {
-        current_page: 1,
-        last_page: 1,
-        per_page: 6,
-        total: 0,
-        from: null,
-        to: null
-      },
-      links: {
-        prev: null,
-        next: null
-      }
-    }
-  )
+  return data.value?.books ?? emptyBooks
 })
 
 useSeoMeta({
