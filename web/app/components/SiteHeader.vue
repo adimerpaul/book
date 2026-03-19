@@ -1,30 +1,30 @@
 <template>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="#inicio" class="brand" aria-label="Ir al inicio de Editores Latinas LTA">
+      <NuxtLink to="/#inicio" class="brand" aria-label="Ir al inicio de Editores Latinas LTA">
         <span class="brand-mark">EL</span>
         <span class="brand-copy">
           <strong>Editores Latinas LTA</strong>
-          <small>Editorial y librería digital</small>
+          <small>Editorial y libreria digital</small>
         </span>
-      </a>
+      </NuxtLink>
 
-      <nav class="nav" aria-label="Navegación principal">
-        <a v-for="item in items" :key="item.href" :href="item.href">{{ item.label }}</a>
+      <nav class="nav" aria-label="Navegacion principal">
+        <NuxtLink v-for="item in items" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
       </nav>
 
-      <a href="#libros" class="btn btn-primary header-cta">Ver catálogo</a>
+      <NuxtLink to="/libros" class="btn btn-primary header-cta">Ver catalogo</NuxtLink>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
 const items = [
-  { label: 'Inicio', href: '#inicio' },
-  { label: 'Sobre Nosotros', href: '#sobre-nosotros' },
-  { label: 'Misión', href: '#mision-vision' },
-  { label: 'Visión', href: '#mision-vision' },
-  { label: 'Nuestros Libros', href: '#libros' },
-  { label: 'Contacto', href: '#contacto' }
+  { label: 'Inicio', to: '/#inicio' },
+  { label: 'Sobre Nosotros', to: '/#sobre-nosotros' },
+  { label: 'Mision', to: '/#mision-vision' },
+  { label: 'Vision', to: '/#mision-vision' },
+  { label: 'Libros', to: '/libros' },
+  { label: 'Contacto', to: '/#contacto' }
 ]
 </script>

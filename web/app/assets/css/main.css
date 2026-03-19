@@ -50,6 +50,10 @@ select {
   padding-top: 5.5rem;
 }
 
+.page-offset {
+  padding-top: 5.5rem;
+}
+
 .section-shell {
   padding: 5.5rem 0;
 }
@@ -609,6 +613,8 @@ select {
   flex-direction: column;
   justify-content: flex-end;
   color: white;
+  overflow: hidden;
+  background: linear-gradient(155deg, #591015 0%, #bc3137 60%, #f0b6a7 100%);
 }
 
 .book-cover::before {
@@ -617,6 +623,20 @@ select {
   inset: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 18px;
+}
+
+.book-cover.has-image::before,
+.book-detail-cover.has-image::before {
+  display: none;
+}
+
+.book-cover-image,
+.book-detail-cover img,
+.detail-gallery-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .book-cover strong,
@@ -697,6 +717,191 @@ select {
   margin-top: 0.8rem;
   color: var(--red);
   font-weight: 700;
+}
+
+.catalog-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.catalog-empty {
+  padding: 2rem;
+  text-align: center;
+}
+
+.catalog-empty strong {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+}
+
+.catalog-page,
+.book-detail-page {
+  min-height: 100vh;
+}
+
+.catalog-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1.5rem;
+  align-items: end;
+}
+
+.catalog-hero-copy h1,
+.book-detail-copy h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.catalog-meta {
+  padding: 2rem;
+}
+
+.catalog-meta strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 3rem;
+}
+
+.catalog-meta span,
+.catalog-meta p {
+  color: var(--muted);
+}
+
+.pagination-shell {
+  padding-top: 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination-status {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 100px;
+}
+
+.pagination-status strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.8rem;
+}
+
+.is-disabled {
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.book-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.book-detail-cover {
+  min-height: 520px;
+  padding: 1rem;
+  overflow: hidden;
+  background: linear-gradient(155deg, #591015 0%, #bc3137 60%, #f0b6a7 100%);
+}
+
+.book-cover-placeholder {
+  display: flex;
+  min-height: 100%;
+  padding: 1.5rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: white;
+}
+
+.book-cover-placeholder strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2rem;
+  line-height: 1.08;
+}
+
+.book-detail-copy {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.detail-back {
+  color: var(--red);
+  font-weight: 700;
+}
+
+.detail-author {
+  margin: 0;
+  color: #4d3e3e;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.detail-summary {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.detail-tags {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.detail-tags span {
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(166, 29, 36, 0.08);
+  color: var(--red-deep);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.detail-content {
+  padding: 1.6rem;
+}
+
+.detail-content h2 {
+  margin: 0 0 0.75rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+}
+
+.detail-content p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.detail-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.detail-gallery-item {
+  min-height: 240px;
+  padding: 0;
+  overflow: hidden;
 }
 
 .promo-banner {
@@ -790,7 +995,9 @@ select {
   .about-grid,
   .promo-banner,
   .footer-grid,
-  .benefits-grid {
+  .benefits-grid,
+  .catalog-hero-grid,
+  .book-detail-grid {
     grid-template-columns: 1fr;
   }
 
@@ -800,6 +1007,10 @@ select {
 
   .vision-grid {
     grid-template-columns: 1fr;
+  }
+
+  .detail-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero-copy,
@@ -864,6 +1075,14 @@ select {
 
   .book-cover {
     min-height: 260px;
+  }
+
+  .book-detail-cover {
+    min-height: 420px;
+  }
+
+  .detail-gallery {
+    grid-template-columns: 1fr;
   }
 
   .promo-banner {

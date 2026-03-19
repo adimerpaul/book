@@ -2,26 +2,26 @@
   <footer id="contacto" class="site-footer">
     <div class="container footer-grid">
       <div>
-        <a href="#inicio" class="brand footer-brand">
+        <NuxtLink to="/#inicio" class="brand footer-brand">
           <span class="brand-mark">EL</span>
           <span class="brand-copy">
             <strong>Editores Latinas LTA</strong>
             <small>Libros que proyectan cultura</small>
           </span>
-        </a>
+        </NuxtLink>
         <p class="footer-copy">
-          Editorial y librería dedicada a la promoción de libros, lectura y conocimiento con una
+          Editorial y libreria dedicada a la promocion de libros, lectura y conocimiento con una
           presencia visual moderna y profesional.
         </p>
       </div>
 
       <div>
-        <h3>Enlaces rápidos</h3>
+        <h3>Enlaces rapidos</h3>
         <div class="footer-links">
-          <a href="#sobre-nosotros">Sobre Nosotros</a>
-          <a href="#mision-vision">Misión y Visión</a>
-          <a href="#libros">Nuestros Libros</a>
-          <a href="#contacto">Contacto</a>
+          <NuxtLink to="/#sobre-nosotros">Sobre Nosotros</NuxtLink>
+          <NuxtLink to="/#mision-vision">Mision y Vision</NuxtLink>
+          <NuxtLink to="/libros">Nuestros Libros</NuxtLink>
+          <NuxtLink to="/#contacto">Contacto</NuxtLink>
         </div>
       </div>
 

@@ -4,8 +4,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutorController;
 use App\Http\Controllers\LibroController;
+use App\Http\Controllers\PublicLibroController;
 
 Route::post('/login', [App\Http\Controllers\UserController::class, 'login']);
+Route::get('/public/libros', [PublicLibroController::class, 'index']);
+Route::get('/public/libros/{slug}', [PublicLibroController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/me/password', [App\Http\Controllers\UserController::class, 'changeMyPassword']);

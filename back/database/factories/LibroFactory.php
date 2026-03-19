@@ -12,6 +12,7 @@ class LibroFactory extends Factory
     public function definition(): array
     {
         return [
+            'slug' => null,
             'titulo' => fake()->sentence(fake()->numberBetween(2, 5)),
             'fecha_publicacion' => fake()->dateTimeBetween('-35 years', 'now')->format('Y-m-d'),
             'pais' => fake()->country(),

@@ -8,13 +8,13 @@
           <p class="hero-text">{{ activeSlide.description }}</p>
 
           <div class="hero-actions">
-            <a href="#libros" class="btn btn-primary">{{ activeSlide.primaryCta }}</a>
-            <a href="#contacto" class="btn btn-secondary">{{ activeSlide.secondaryCta }}</a>
+            <NuxtLink to="/libros" class="btn btn-primary">{{ activeSlide.primaryCta }}</NuxtLink>
+            <NuxtLink to="/#contacto" class="btn btn-secondary">{{ activeSlide.secondaryCta }}</NuxtLink>
           </div>
 
           <div class="hero-meta">
             <span class="meta-chip">{{ activeSlide.badge }}</span>
-            <span class="meta-note">Diseño editorial, cultura y lectura con presencia comercial.</span>
+            <span class="meta-note">Diseno editorial, cultura y lectura con presencia comercial.</span>
           </div>
         </div>
 

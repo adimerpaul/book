@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
@@ -15,6 +16,7 @@ class Libro extends Model implements AuditableContract
     protected $table = 'libros';
 
     protected $fillable = [
+        'slug',
         'titulo',
         'autor_id',
         'fecha_publicacion',
@@ -32,6 +34,25 @@ class Libro extends Model implements AuditableContract
         'publicado_web',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'fecha_publicacion' => 'date',
+            'publicado_web' => 'boolean',
+        ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $libro) {
+            if (!$libro->isDirty('titulo') && filled($libro->slug)) {
+                return;
+            }
+
+            $libro->slug = static::generateUniqueSlug($libro->titulo, $libro->getKey());
+        });
+    }
+
     public function autor()
     {
         return $this->belongsTo(Autor::class);
@@ -40,5 +61,23 @@ class Libro extends Model implements AuditableContract
     public function fotografias()
     {
         return $this->hasMany(LibroFotografia::class)->orderByDesc('id');
+    }
+
+    public static function generateUniqueSlug(string $titulo, ?int $ignoreId = null): string
+    {
+        $baseSlug = Str::slug($titulo);
+        $baseSlug = $baseSlug !== '' ? $baseSlug : 'libro';
+        $slug = $baseSlug;
+        $suffix = 2;
+
+        while (static::withTrashed()
+            ->when($ignoreId, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->where('slug', $slug)
+            ->exists()) {
+            $slug = "{$baseSlug}-{$suffix}";
+            $suffix++;
+        }
+
+        return $slug;
     }
 }
