@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 export default defineNuxtPlugin(() => {
-  const requestUrl = useRequestURL()
-  const baseURL = import.meta.server ? requestUrl.origin : ''
+  const config = useRuntimeConfig()
+  const baseURL = import.meta.server ? config.apiBase : config.public.apiBase
 
   const api = axios.create({
     baseURL,

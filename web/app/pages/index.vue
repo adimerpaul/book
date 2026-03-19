@@ -58,14 +58,14 @@ const emptyCox: PublicCoxResponse = {
 
 const { data } = await useAsyncData('home-content', async () => {
   const [hero, books, cox] = await Promise.allSettled([
-    $axios.get<PublicHeroSliderResponse>('/api/hero-sliders').then((response) => response.data),
-    $axios.get<PaginatedBooksResponse>('/api/libros', {
+    $axios.get<PublicHeroSliderResponse>('/public/hero-sliders').then((response) => response.data),
+    $axios.get<PaginatedBooksResponse>('/public/libros', {
       params: {
         page: 1,
         per_page: 6
       }
     }).then((response) => response.data),
-    $axios.get<PublicCoxResponse>('/api/cox').then((response) => response.data)
+    $axios.get<PublicCoxResponse>('/public/cox').then((response) => response.data)
   ])
 
   return {

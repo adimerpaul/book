@@ -124,14 +124,14 @@ const { data } = await useAsyncData(
   () => `catalog-page-${page.value}-${search.value}`,
   async () => {
     const [books, cox] = await Promise.allSettled([
-      $axios.get<PaginatedBooksResponse>('/api/libros', {
+      $axios.get<PaginatedBooksResponse>('/public/libros', {
         params: {
           page: page.value,
           per_page: 9,
           search: search.value || undefined
         }
       }).then((response) => response.data),
-      $axios.get<PublicCoxResponse>('/api/cox').then((response) => response.data)
+      $axios.get<PublicCoxResponse>('/public/cox').then((response) => response.data)
     ])
 
     return {

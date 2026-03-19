@@ -111,8 +111,8 @@ const { data, error } = await useAsyncData(
   () => `book-detail-${slug.value}`,
   async () => {
     const [book, cox] = await Promise.all([
-      $axios.get<BookDetailResponse>(`/api/libros/${slug.value}`),
-      $axios.get<PublicCoxResponse>('/api/cox')
+      $axios.get<BookDetailResponse>(`/public/libros/${slug.value}`),
+      $axios.get<PublicCoxResponse>('/public/cox')
     ])
 
     return {
